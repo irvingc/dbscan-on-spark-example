@@ -50,12 +50,13 @@ object SampleDBSCANJob {
 
     log.info(s"EPS: $eps minPoints: $minPoints")
 
-    val model = DBSCAN(
+    val model = DBSCAN.train(
+      parsedData,
       eps = eps,
       minPoints = minPoints,
-      maxPointsPerPartition = maxPointsPerPartition).train(parsedData)
+      maxPointsPerPartition = maxPointsPerPartition)
 
-    model.labeledPoints.map(p =>  s"${p.x},${p.y},${p.cluster}").saveAsTextFile(dest)
+    model.labeledPoints.map(p => s"${p.x},${p.y},${p.cluster}").saveAsTextFile(dest)
     log.info("Stopping Spark Context...")
     sc.stop()
 
